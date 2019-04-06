@@ -1,6 +1,6 @@
 # FinalProject-Group4
 
-###Content
+### Content
 Fruits were planted in the shaft of a low speed motor (3 rpm) and a short movie of 20 seconds was recorded.
 
 A Logitech C920 camera was used for filming the fruits. This is one of the best webcams.

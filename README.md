@@ -1,7 +1,6 @@
 # FinalProject-Group4
 
-## Dataset properties
-
+### Dataset properties
 Training set: 15506 images.
 
 Testing set: 5195 images.

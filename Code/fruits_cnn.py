@@ -27,7 +27,6 @@ alpha = 0.0001
 # ----------------------------------------------------------------------------------------------------------------------
 
 # 2 layer network
-# batch shape for input x is (3, 100, 100)
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()

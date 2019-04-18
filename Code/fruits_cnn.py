@@ -32,17 +32,16 @@ class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
         self.layer1 = nn.Sequential(
-            # input channels = 3, output channels = 50
-            nn.Conv2d(3, 50, kernel_size=10, padding=2),
-            nn.BatchNorm2d(50),
+            nn.Conv2d(in_channels=3, out_channels=50, kernel_size=10, padding=2),
+            nn.BatchNorm2d(num_features=50),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
         self.layer2 = nn.Sequential(
-            nn.Conv2d(50, 100, kernel_size=10, padding=2),
-            nn.BatchNorm2d(100),
+            nn.Conv2d(in_channels=50, out_channels=100, kernel_size=10, padding=2),
+            nn.BatchNorm2d(num_features=100),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
-        self.fc = nn.Linear(500, 33)
+        self.fc = nn.Linear(in_features=500, out_features=33)
 
     def forward(self, x):
         out = self.layer1(x)

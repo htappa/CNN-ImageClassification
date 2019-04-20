@@ -9,7 +9,6 @@ from torch.autograd import Variable
 import numpy as np
 import os
 import glob
-import cv2
 from torchvision import datasets
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
@@ -86,17 +85,36 @@ class CNN(nn.Module):
         out = self.fc(out)
         return out
 
+
+cnn = CNN()
+cnn.cuda()
+
 # ----------------------------------------------------------------------------------------------------------------------
 # LOSS & OPTIMIZER
 # ----------------------------------------------------------------------------------------------------------------------
 
-
+criterion = nn.CrossEntropyLoss()
+optimizer = torch.optim.Adam(cnn.parameters(), lr=alpha)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # TRAIN MODEL
 # ----------------------------------------------------------------------------------------------------------------------
 
+for epoch in range(num_epochs):
+    for i, (images, labels) in enumerate(train_loader):
+        images = Variable(images).cuda()
+        labels = Variable(labels).cuda()
 
+        # forward pass, backpropagation, optimize
+        optimizer.zero_grad()
+        outputs = cnn(images)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()
+
+        if (i + 1) % 100 == 0:
+            print('Epoch [%d/%d], Iter [%d/%d] Loss: %.4f'
+                  % (epoch + 1, num_epochs, i + 1, len(train_dataset) // batch_size, loss.item()))
 
 # ----------------------------------------------------------------------------------------------------------------------
 # TEST MODEL

@@ -90,7 +90,6 @@ class CNN(nn.Module):
         out = self.fc(out)
         return out
 
-
 cnn = CNN()
 #cnn.cuda()
 

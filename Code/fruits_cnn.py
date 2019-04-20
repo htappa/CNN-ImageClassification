@@ -63,8 +63,6 @@ input_size = 10
 hidden_size = 10
 num_classes = 5
 
-
-
 # ----------------------------------------------------------------------------------------------------------------------
 # CONVOLUTIONAL NEURAL NETWORK (CNN) MODEL
 # ----------------------------------------------------------------------------------------------------------------------
@@ -74,16 +72,16 @@ class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
         self.layer1 = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=50, kernel_size=10, padding=2),
-            nn.BatchNorm2d(num_features=50),
+            nn.Conv2d(in_channels=3, out_channels=32, kernel_size=5, padding=2),
+            nn.BatchNorm2d(num_features=32),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
         self.layer2 = nn.Sequential(
-            nn.Conv2d(in_channels=50, out_channels=100, kernel_size=10, padding=2),
-            nn.BatchNorm2d(num_features=100),
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=5, padding=2),
+            nn.BatchNorm2d(num_features=64),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
-        self.fc = nn.Linear(in_features=44100, out_features=5) #in_features = [(inputsize + 2*pad - kernelsize)/stride] + 1﻿
+        self.fc = nn.Linear(in_features=40000, out_features=num_classes) #in_features = [(inputsize + 2*pad - kernelsize)/stride] + 1﻿
 
     def forward(self, x):
         out = self.layer1(x)

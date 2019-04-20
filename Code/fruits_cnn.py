@@ -28,8 +28,8 @@ train_data = datasets.ImageFolder(train_dict, transform= transform)
 test_data = datasets.ImageFolder(test_dict, transform= transform)
 
 #Use DataLoader to get batches of data from our datasets
-train_loader = torch.utils.data.DataLoader(train_data, batch_size=80, shuffle = True)
-test_loader = torch.utils.data.DataLoader(test_data, batch_size=80, shuffle = True)
+train_loader = torch.utils.data.DataLoader(train_data, batch_size=8, shuffle = True)
+test_loader = torch.utils.data.DataLoader(test_data, batch_size=8, shuffle = True)
 
 def imshow(img):
     img = img / 2 + 0.5
@@ -39,6 +39,7 @@ def imshow(img):
 dataiter = iter(train_loader)
 images, labels = dataiter.next()
 imshow(torchvision.utils.make_grid(images))
+print(' '.join('%5s' % train_data.classes[labels[j]] for j in range(8)))
 plt.show()
 
 # ----------------------------------------------------------------------------------------------------------------------

@@ -10,6 +10,7 @@ import numpy as np
 from torchvision import datasets
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
+import pandas as pd
 # ----------------------------------------------------------------------------------------------------------------------
 # LOAD DATASET
 # ----------------------------------------------------------------------------------------------------------------------
@@ -132,5 +133,7 @@ for images, labels in test_loader:
 
 print()
 print('Test Accuracy of model on the 5195 test images: %d %%' % (100 * correct / total))
-print()
-print(confusion_matrix)
+
+# turn confusion matrix into csv
+confusion_matrix = pd.DataFrame(confusion_matrix.numpy())
+confusion_matrix.to_csv('fruits_cnn_conf.csv')

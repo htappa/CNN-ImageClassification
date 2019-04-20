@@ -28,8 +28,8 @@ train_data = datasets.ImageFolder(train_dict, transform= transform)
 test_data = datasets.ImageFolder(test_dict, transform= transform)
 
 #Use DataLoader to get batches of data from our datasets
-train_loader = torch.utils.data.DataLoader(train_data, batch_size=8, shuffle = True)
-test_loader = torch.utils.data.DataLoader(test_data, batch_size=8, shuffle = True)
+train_loader = torch.utils.data.DataLoader(train_data, batch_size=40, shuffle = True)
+test_loader = torch.utils.data.DataLoader(test_data, batch_size=40, shuffle = True)
 
 def imshow(img):
     img = img / 2 + 0.5
@@ -46,8 +46,8 @@ plt.show()
 # HYPER-PARAMETERS
 # ----------------------------------------------------------------------------------------------------------------------
 
-num_epochs = 10
-batch_size = 80
+num_epochs = 6
+batch_size = 40
 alpha = 0.0001
 input_size = 10
 hidden_size = 10
@@ -117,6 +117,9 @@ for epoch in range(num_epochs):
 cnn.eval()  # Change model to 'eval' mode
 correct = 0
 total = 0
+
+confusion_matrix = torch.zeros(num_classes, num_classes)
+
 for images, labels in test_loader:
     images = Variable(images).cuda()
     outputs = cnn(images)
@@ -124,4 +127,10 @@ for images, labels in test_loader:
     total += labels.size(0)
     correct += (predicted.cpu() == labels).sum()
 
+    for t, p in zip(labels.view(-1), predicted.view(-1)):
+        confusion_matrix[t.long(), p.long()] += 1
+
+print()
 print('Test Accuracy of model on the 5195 test images: %d %%' % (100 * correct / total))
+print()
+print(confusion_matrix)

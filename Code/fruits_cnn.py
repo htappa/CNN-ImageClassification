@@ -3,6 +3,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 import torch
 import torch.nn as nn
+import torchvision
 import torchvision.transforms as transforms
 from torch.autograd import Variable
 import numpy as np
@@ -11,13 +12,15 @@ import glob
 import cv2
 from torchvision import datasets
 from torch.utils.data import DataLoader
+import matplotlib.pyplot as plt
 # ----------------------------------------------------------------------------------------------------------------------
 # LOAD DATASET
 # ----------------------------------------------------------------------------------------------------------------------
 
 #This is the directory on my local, but I think it actually needs to be the directory in the cloud.
-train_dict = "C:\Users\Kinse\Documents\Google_cloud_Machinelearning\FinalProject-Group4\Code\fruits_data_set\Training"
-test_dict = "C:\Users\Kinse\Documents\Google_cloud_Machinelearning\FinalProject-Group4\Code\fruits_data_set\Testing"
+#Updated file path -eg
+train_dict = "./fruits_data_set/Training"
+test_dict = "./fruits_data_set/Testing"
 
 #input the folder names of the fruits you want to train/test
 targets = ["Apple Red 1", "Cherry", "Grape", "Kiwi", "Quince"]
@@ -32,12 +35,22 @@ transform = transforms.Compose(
 #we simply loop through the target folders and add the images to a train_data and test_data variables
 #from torchvision we utilize ImageFolder because it automatically adds the target name to the image data
 for target in targets:
-    train_data = datasets.ImageFolder('train_dict', transform= transform)
-    test_data = datasets.ImageFolder('test_dict', transform= transform)
+    train_data = datasets.ImageFolder(train_dict, transform= transform)
+    test_data = datasets.ImageFolder(test_dict, transform= transform)
 
 #Use DataLoader to get batches of data from our datasets
 train_loader = torch.utils.data.DataLoader(train_data, batch_size=100, shuffle = True)
 test_loader = torch.utils.data.DataLoader(test_data, batch_size=100, shuffle = True)
+
+def imshow(img):
+    img = img / 2 + 0.5
+    npimg = img.numpy()
+    plt.imshow(np.transpose(npimg, (1,2,0)))
+
+dataiter = iter(train_loader)
+images, labels = dataiter.next()
+imshow(torchvision.utils.make_grid(images))
+plt.show()
 # ----------------------------------------------------------------------------------------------------------------------
 # HYPER-PARAMETERS
 # ----------------------------------------------------------------------------------------------------------------------

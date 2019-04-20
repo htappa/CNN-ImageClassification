@@ -38,8 +38,8 @@ for target in targets:
     test_data = datasets.ImageFolder(test_dict, transform= transform)
 
 #Use DataLoader to get batches of data from our datasets
-train_loader = torch.utils.data.DataLoader(train_data, batch_size=100, shuffle = True)
-test_loader = torch.utils.data.DataLoader(test_data, batch_size=100, shuffle = True)
+train_loader = torch.utils.data.DataLoader(train_data, batch_size=80, shuffle = True)
+test_loader = torch.utils.data.DataLoader(test_data, batch_size=80, shuffle = True)
 
 def imshow(img):
     img = img / 2 + 0.5
@@ -50,13 +50,20 @@ dataiter = iter(train_loader)
 images, labels = dataiter.next()
 imshow(torchvision.utils.make_grid(images))
 plt.show()
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 # HYPER-PARAMETERS
 # ----------------------------------------------------------------------------------------------------------------------
 
 num_epochs = 10
-batch_size = 100
+batch_size = 80
 alpha = 0.0001
+input_size = 10
+hidden_size = 10
+num_classes = 5
+
+
 
 # ----------------------------------------------------------------------------------------------------------------------
 # CONVOLUTIONAL NEURAL NETWORK (CNN) MODEL

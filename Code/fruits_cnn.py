@@ -83,7 +83,7 @@ class CNN(nn.Module):
             nn.BatchNorm2d(num_features=100),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
-        self.fc = nn.Linear(in_features=100*48*48, out_features=33) #in_features = [(inputsize + 2*pad - kernelsize)/stride] + 1﻿
+        self.fc = nn.Linear(in_features=44100, out_features=5) #in_features = [(inputsize + 2*pad - kernelsize)/stride] + 1﻿
 
     def forward(self, x):
         out = self.layer1(x)
@@ -94,7 +94,7 @@ class CNN(nn.Module):
 
 
 cnn = CNN()
-cnn.cuda()
+#cnn.cuda()
 
 # ----------------------------------------------------------------------------------------------------------------------
 # LOSS & OPTIMIZER
@@ -109,8 +109,8 @@ optimizer = torch.optim.Adam(cnn.parameters(), lr=alpha)
 
 for epoch in range(num_epochs):
     for i, (images, labels) in enumerate(train_loader):
-        images = Variable(images).cuda()
-        labels = Variable(labels).cuda()
+        images = Variable(images)#.cuda()
+        labels = Variable(labels)#.cuda()
 
         # forward pass, backpropagation, optimize
         optimizer.zero_grad()
@@ -121,7 +121,7 @@ for epoch in range(num_epochs):
 
         if (i + 1) % 100 == 0:
             print('Epoch [%d/%d], Iter [%d/%d] Loss: %.4f'
-                  % (epoch + 1, num_epochs, i + 1, len(train_dataset) // batch_size, loss.item()))
+                  % (epoch + 1, num_epochs, i + 1, len(train_data) // batch_size, loss.item()))
 
 # ----------------------------------------------------------------------------------------------------------------------
 # TEST MODEL

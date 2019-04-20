@@ -18,8 +18,8 @@ import matplotlib.pyplot as plt
 
 #This is the directory on my local, but I think it actually needs to be the directory in the cloud.
 #Updated file path -eg
-train_dict = "./fruits_data_set/Training"
-test_dict = "./fruits_data_set/Testing"
+train_dict = "./testset1/Training"
+test_dict = "./testset1/Testing"
 
 #input the folder names of the fruits you want to train/test
 targets = ["Apple Red 1", "Cherry", "Grape", "Kiwi", "Quince"]
@@ -36,6 +36,7 @@ transform = transforms.Compose(
 for target in targets:
     train_data = datasets.ImageFolder(train_dict, transform= transform)
     test_data = datasets.ImageFolder(test_dict, transform= transform)
+#label1 = train_data.classes
 
 #Use DataLoader to get batches of data from our datasets
 train_loader = torch.utils.data.DataLoader(train_data, batch_size=80, shuffle = True)
@@ -49,6 +50,7 @@ def imshow(img):
 dataiter = iter(train_loader)
 images, labels = dataiter.next()
 imshow(torchvision.utils.make_grid(images))
+print(' '.join('%5s' % targets[labels[j]] for j in range(5)))
 plt.show()
 
 

@@ -7,8 +7,6 @@ import torchvision
 import torchvision.transforms as transforms
 from torch.autograd import Variable
 import numpy as np
-import os
-import glob
 from torchvision import datasets
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
@@ -21,21 +19,13 @@ import matplotlib.pyplot as plt
 train_dict = "./fruits_data_set/Training"
 test_dict = "./fruits_data_set/Testing"
 
-#input the folder names of the fruits you want to train/test
-targets = ["Apple Red 1", "Cherry", "Grape", "Kiwi", "Quince"]
-
 #Transform the image data to a FloatTensor with shape of (color X height X weight) normalizing along the way
 transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
-
-#Since the dataset is rather large and we do not want to train on all classes
-#we simply loop through the target folders and add the images to a train_data and test_data variables
-#from torchvision we utilize ImageFolder because it automatically adds the target name to the image data
-for target in targets:
-    train_data = datasets.ImageFolder(train_dict, transform= transform)
-    test_data = datasets.ImageFolder(test_dict, transform= transform)
+train_data = datasets.ImageFolder(train_dict, transform= transform)
+test_data = datasets.ImageFolder(test_dict, transform= transform)
 
 #Use DataLoader to get batches of data from our datasets
 train_loader = torch.utils.data.DataLoader(train_data, batch_size=80, shuffle = True)
@@ -51,7 +41,6 @@ images, labels = dataiter.next()
 imshow(torchvision.utils.make_grid(images))
 plt.show()
 
-
 # ----------------------------------------------------------------------------------------------------------------------
 # HYPER-PARAMETERS
 # ----------------------------------------------------------------------------------------------------------------------
@@ -61,7 +50,7 @@ batch_size = 80
 alpha = 0.0001
 input_size = 10
 hidden_size = 10
-num_classes = 5
+num_classes = 33
 
 # ----------------------------------------------------------------------------------------------------------------------
 # CONVOLUTIONAL NEURAL NETWORK (CNN) MODEL
@@ -91,7 +80,7 @@ class CNN(nn.Module):
         return out
 
 cnn = CNN()
-#cnn.cuda()
+cnn.cuda()
 
 # ----------------------------------------------------------------------------------------------------------------------
 # LOSS & OPTIMIZER
@@ -106,8 +95,8 @@ optimizer = torch.optim.Adam(cnn.parameters(), lr=alpha)
 
 for epoch in range(num_epochs):
     for i, (images, labels) in enumerate(train_loader):
-        images = Variable(images)#.cuda()
-        labels = Variable(labels)#.cuda()
+        images = Variable(images).cuda()
+        labels = Variable(labels).cuda()
 
         # forward pass, backpropagation, optimize
         optimizer.zero_grad()
@@ -124,3 +113,14 @@ for epoch in range(num_epochs):
 # TEST MODEL
 # ----------------------------------------------------------------------------------------------------------------------
 
+cnn.eval()  # Change model to 'eval' mode
+correct = 0
+total = 0
+for images, labels in test_loader:
+    images = Variable(images).cuda()
+    outputs = cnn(images)
+    _, predicted = torch.max(outputs.data, 1)
+    total += labels.size(0)
+    correct += (predicted.cpu() == labels).sum()
+
+print('Test Accuracy of model on the 5195 test images: %d %%' % (100 * correct / total))

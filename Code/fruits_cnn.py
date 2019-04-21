@@ -14,6 +14,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import time
 
+# set seed
+torch.manual_seed(10)
+
 # ----------------------------------------------------------------------------------------------------------------------
 # LOAD DATASET
 # ----------------------------------------------------------------------------------------------------------------------
@@ -21,12 +24,11 @@ import time
 # set start time to record computation run time
 start_time = time.time()
 
-#This is the directory on my local, but I think it actually needs to be the directory in the cloud.
-#Updated file path -eg
+# set file path
 train_dict = "./fruits_data_set/Training"
 test_dict = "./fruits_data_set/Testing"
 
-#Transform the image data to a FloatTensor with shape of (color X height X weight) normalizing along the way
+# transform image data to FloatTensor with shape of (color x height x weight) normalizing along the way
 transform = transforms.Compose(
     [transforms.ToTensor(),
      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
@@ -34,9 +36,10 @@ transform = transforms.Compose(
 train_data = datasets.ImageFolder(train_dict, transform= transform)
 test_data = datasets.ImageFolder(test_dict, transform= transform)
 
-#Use DataLoader to get batches of data from our datasets
-train_loader = torch.utils.data.DataLoader(train_data, batch_size=40, shuffle = True)
-test_loader = torch.utils.data.DataLoader(test_data, batch_size=40, shuffle = True)
+# use DataLoader to get batches of data from the datasets
+batch_size = 31
+train_loader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, shuffle = True)
+test_loader = torch.utils.data.DataLoader(test_data, batch_size=batch_size, shuffle = True)
 
 def imshow(img):
     img = img / 2 + 0.5
@@ -53,11 +56,9 @@ plt.show()
 # HYPER-PARAMETERS
 # ----------------------------------------------------------------------------------------------------------------------
 
-num_epochs = 6
-batch_size = 40
+num_epochs = 5
 alpha = 0.0001
 input_size = 10
-hidden_size = 10
 num_classes = 33
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -69,24 +70,36 @@ class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
         self.layer1 = nn.Sequential(
-            nn.Conv2d(in_channels=3, out_channels=32, kernel_size=5, padding=2),
+            # 3 input channels, given that we are using color images (R, G, B), and 16 output channels
+            # using 5x5 kernel with padding=1 to ensure that kernel properly passes over edges of image
+            nn.Conv2d(in_channels=3, out_channels=16, kernel_size=5, padding=1),
+            # apply batch normalization
+            nn.BatchNorm2d(num_features=16),
+            # apply relu
+            nn.ReLU(),
+            # apply 2D max pooling over feature set
+            nn.MaxPool2d(kernel_size=2, stride=2))
+        # repeat with second layer
+        self.layer2 = nn.Sequential(
+            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=5, padding=1),
             nn.BatchNorm2d(num_features=32),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
-        self.layer2 = nn.Sequential(
-            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=5, padding=2),
-            nn.BatchNorm2d(num_features=64),
-            nn.ReLU(),
-            nn.MaxPool2d(kernel_size=2, stride=2))
-        self.fc = nn.Linear(in_features=40000, out_features=num_classes) #in_features = [(inputsize + 2*pad - kernelsize)/stride] + 1﻿
+        # pass to fully connected layer
+        self.fc = nn.Linear(in_features=16928, out_features=num_classes)
 
     def forward(self, x):
+        # compute first layer
         out = self.layer1(x)
+        # compute second layer
         out = self.layer2(out)
+        # reshape data
         out = out.view(out.size(0), -1)
+        # compute fully connected layer
         out = self.fc(out)
         return out
 
+# define cnn and set to run on GPU
 cnn = CNN()
 cnn.cuda()
 
@@ -101,6 +114,9 @@ optimizer = torch.optim.Adam(cnn.parameters(), lr=alpha)
 # TRAIN MODEL
 # ----------------------------------------------------------------------------------------------------------------------
 
+# define blank list for plotting loss
+loss_list = []
+
 for epoch in range(num_epochs):
     for i, (images, labels) in enumerate(train_loader):
         images = Variable(images).cuda()
@@ -113,9 +129,20 @@ for epoch in range(num_epochs):
         loss.backward()
         optimizer.step()
 
+        #append loss to loss_list
+        loss_list.append(loss.data)
+
+        # print loss for iterations in each epoch
         if (i + 1) % 100 == 0:
             print('Epoch [%d/%d], Iter [%d/%d] Loss: %.4f'
                   % (epoch + 1, num_epochs, i + 1, len(train_data) // batch_size, loss.item()))
+
+# plot training loss
+plt.plot(loss_list)
+plt.title('Training Loss')
+plt.xlabel("???")
+plt.ylabel("Loss")
+plt.show()
 
 # ----------------------------------------------------------------------------------------------------------------------
 # TEST MODEL
@@ -123,11 +150,16 @@ for epoch in range(num_epochs):
 
 # change model to 'eval' mode
 cnn.eval()
+
+# set correct and total equal to zero
 correct = 0
 total = 0
 
 # define blank confusion matrix
 confusion_matrix = torch.zeros(num_classes, num_classes)
+
+# define blank list for plotting accuracy
+accuracy_list = []
 
 for images, labels in test_loader:
     images = Variable(images).cuda()
@@ -136,9 +168,22 @@ for images, labels in test_loader:
     total += labels.size(0)
     correct += (predicted.cpu() == labels).sum()
 
+    # calculate accuracy and append to accuracy_list
+    accuracy = 100 * correct / total
+    accuracy_list.append(accuracy.data)
+
+    # add label values and predicted values to confusion matrix
     for t, p in zip(labels.view(-1), predicted.view(-1)):
         confusion_matrix[t.long(), p.long()] += 1
 
+# plot test accuracy
+plt.plot(accuracy_list)
+plt.title('Test Accuracy')
+plt.xlabel("???")
+plt.ylabel("Accuracy")
+plt.show()
+
+# print test accuracy
 print()
 print('Test Accuracy of model on the 5195 test images: %d %%' % (100 * correct / total))
 

@@ -1,6 +1,7 @@
 # ----------------------------------------------------------------------------------------------------------------------
 # PACKAGES
 # ----------------------------------------------------------------------------------------------------------------------
+
 import torch
 import torch.nn as nn
 import torchvision
@@ -11,6 +12,7 @@ from torchvision import datasets
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 import pandas as pd
+
 # ----------------------------------------------------------------------------------------------------------------------
 # LOAD DATASET
 # ----------------------------------------------------------------------------------------------------------------------
@@ -58,7 +60,7 @@ num_classes = 33
 # CONVOLUTIONAL NEURAL NETWORK (CNN) MODEL
 # ----------------------------------------------------------------------------------------------------------------------
 
-# 2 layer network
+# 2 layer convolutional neural network
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()
@@ -115,10 +117,12 @@ for epoch in range(num_epochs):
 # TEST MODEL
 # ----------------------------------------------------------------------------------------------------------------------
 
-cnn.eval()  # Change model to 'eval' mode
+# change model to 'eval' mode
+cnn.eval()
 correct = 0
 total = 0
 
+# define blank confusion matrix
 confusion_matrix = torch.zeros(num_classes, num_classes)
 
 for images, labels in test_loader:

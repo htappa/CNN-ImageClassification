@@ -147,4 +147,5 @@ confusion_matrix = pd.DataFrame(confusion_matrix.numpy())
 confusion_matrix.to_csv('fruits_cnn_conf.csv')
 
 # print run time
+print()
 print('fruits_cnn run time: %s seconds' % (time.time() - start_time))

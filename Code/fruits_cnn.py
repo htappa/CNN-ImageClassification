@@ -85,14 +85,22 @@ class CNN(nn.Module):
             nn.BatchNorm2d(num_features=64),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
+        # repeat with third layer
+        self.layer3 = nn.Sequential(
+            nn.Conv2d(in_channels=64, out_channels=128, kernel_size=5, padding=2),
+            nn.BatchNorm2d(num_features=128),
+            nn.ReLU(),
+            nn.MaxPool2d(kernel_size=2, stride=2))
         # pass to fully connected layer
-        self.fc = nn.Linear(in_features=40000, out_features=num_classes)
+        self.fc = nn.Linear(in_features=18432, out_features=num_classes)
 
     def forward(self, x):
         # compute first layer
         out = self.layer1(x)
         # compute second layer
         out = self.layer2(out)
+        # compute third layer
+        out = self.layer3(out)
         # reshape data
         out = out.view(out.size(0), -1)
         # compute fully connected layer

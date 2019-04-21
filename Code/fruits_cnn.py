@@ -37,7 +37,7 @@ train_data = datasets.ImageFolder(train_dict, transform= transform)
 test_data = datasets.ImageFolder(test_dict, transform= transform)
 
 # use DataLoader to get batches of data from the datasets
-batch_size = 31
+batch_size = 40
 train_loader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, shuffle = True)
 test_loader = torch.utils.data.DataLoader(test_data, batch_size=batch_size, shuffle = True)
 
@@ -56,7 +56,7 @@ plt.show()
 # HYPER-PARAMETERS
 # ----------------------------------------------------------------------------------------------------------------------
 
-num_epochs = 5
+num_epochs = 6
 alpha = 0.0001
 input_size = 10
 num_classes = 33
@@ -72,21 +72,21 @@ class CNN(nn.Module):
         self.layer1 = nn.Sequential(
             # 3 input channels, given that we are using color images (R, G, B), and 16 output channels
             # using 5x5 kernel with padding=1 to ensure that kernel properly passes over edges of image
-            nn.Conv2d(in_channels=3, out_channels=16, kernel_size=5, padding=1),
+            nn.Conv2d(in_channels=3, out_channels=32, kernel_size=5, padding=2),
             # apply batch normalization
-            nn.BatchNorm2d(num_features=16),
+            nn.BatchNorm2d(num_features=32),
             # apply relu
             nn.ReLU(),
             # apply 2D max pooling over feature set
             nn.MaxPool2d(kernel_size=2, stride=2))
         # repeat with second layer
         self.layer2 = nn.Sequential(
-            nn.Conv2d(in_channels=16, out_channels=32, kernel_size=5, padding=1),
-            nn.BatchNorm2d(num_features=32),
+            nn.Conv2d(in_channels=32, out_channels=64, kernel_size=5, padding=2),
+            nn.BatchNorm2d(num_features=64),
             nn.ReLU(),
             nn.MaxPool2d(kernel_size=2, stride=2))
         # pass to fully connected layer
-        self.fc = nn.Linear(in_features=16928, out_features=num_classes)
+        self.fc = nn.Linear(in_features=40000, out_features=num_classes)
 
     def forward(self, x):
         # compute first layer

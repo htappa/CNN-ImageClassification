@@ -140,3 +140,4 @@ print('Test Accuracy of model on the 814 test images: %d %%' % (100 * correct / 
 # turn confusion matrix into csv
 confusion_matrix = pd.DataFrame(confusion_matrix.numpy())
 confusion_matrix.to_csv('testset2_conf.csv')
+

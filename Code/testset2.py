@@ -19,8 +19,8 @@ import pandas as pd
 
 #This is the directory on my local, but I think it actually needs to be the directory in the cloud.
 #Updated file path -eg
-train_dict = "./testset2/Training"
-test_dict = "./testset2/Testing"
+train_dict = "./fruits_data_subset1/Training"
+test_dict = "./fruits_data_subset1/Testing"
 
 #Transform the image data to a FloatTensor with shape of (color X height X weight) normalizing along the way
 transform = transforms.Compose(
@@ -44,13 +44,12 @@ images, labels = dataiter.next()
 imshow(torchvision.utils.make_grid(images))
 print(' '.join('%5s' % train_data.classes[labels[j]] for j in range(40)))
 plt.show()
-
 # ----------------------------------------------------------------------------------------------------------------------
 # HYPER-PARAMETERS
 # ----------------------------------------------------------------------------------------------------------------------
 
 num_epochs = 6
-batch_size = 40
+batch_size = 10
 alpha = 0.0001
 input_size = 10
 hidden_size = 10
@@ -136,7 +135,7 @@ for images, labels in test_loader:
         confusion_matrix[t.long(), p.long()] += 1
 
 print()
-print('Test Accuracy of model on the 5195 test images: %d %%' % (100 * correct / total))
+print('Test Accuracy of model on the 814 test images: %d %%' % (100 * correct / total))
 
 # turn confusion matrix into csv
 confusion_matrix = pd.DataFrame(confusion_matrix.numpy())

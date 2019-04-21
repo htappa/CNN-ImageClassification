@@ -12,15 +12,19 @@ from torchvision import datasets
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 import pandas as pd
+import time
 
 # ----------------------------------------------------------------------------------------------------------------------
 # LOAD DATASET
 # ----------------------------------------------------------------------------------------------------------------------
 
+# set start time to record computation run time
+start_time = time.time()
+
 #This is the directory on my local, but I think it actually needs to be the directory in the cloud.
 #Updated file path -eg
-train_dict = "./fruits_data_subset1/Training"
-test_dict = "./fruits_data_subset1/Testing"
+train_dict = "./fruits_data_subset2/Training"
+test_dict = "./fruits_data_subset2/Testing"
 
 #Transform the image data to a FloatTensor with shape of (color X height X weight) normalizing along the way
 transform = transforms.Compose(
@@ -141,3 +145,5 @@ print('Test Accuracy of model on the 814 test images: %d %%' % (100 * correct / 
 confusion_matrix = pd.DataFrame(confusion_matrix.numpy())
 confusion_matrix.to_csv('testset2_conf.csv')
 
+# print run time
+print('fruits_cnn_subset2 run time: %s seconds' % (time.time() - start_time))

@@ -12,10 +12,14 @@ from torchvision import datasets
 from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 import pandas as pd
+import time
 
 # ----------------------------------------------------------------------------------------------------------------------
 # LOAD DATASET
 # ----------------------------------------------------------------------------------------------------------------------
+
+# set start time to record computation run time
+start_time = time.time()
 
 #This is the directory on my local, but I think it actually needs to be the directory in the cloud.
 #Updated file path -eg
@@ -141,3 +145,6 @@ print('Test Accuracy of model on the 5195 test images: %d %%' % (100 * correct /
 # turn confusion matrix into csv
 confusion_matrix = pd.DataFrame(confusion_matrix.numpy())
 confusion_matrix.to_csv('fruits_cnn_conf.csv')
+
+# print run time
+print('fruits_cnn run time: %s seconds' % (time.time() - start_time))

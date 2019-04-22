@@ -29,7 +29,7 @@ Each of these networks are set up to run CUDA operations, and our test machine u
 Further description of the model and results can be found in the project report, "Group4ProjectReport.pdf."
 
 ### Dependencies
-CUDA compatible GPU
+CUDA compatible GPU  
 Python 3.5.2  
 Pytorch 0.4.1  
 Pandas 0.23.4  

@@ -42,6 +42,8 @@ batch_size = 40
 # use DataLoader to get batches of data from the datasets
 train_loader = torch.utils.data.DataLoader(train_data, batch_size=40, shuffle = True)
 test_loader = torch.utils.data.DataLoader(test_data, batch_size=40, shuffle = True)
+print('Size of Training Set: ' , (len(train_loader.dataset)))
+print('Size of Testing Set: ' , (len(test_loader.dataset)))
 
 def imshow(img):
     img = img / 2 + 0.5
@@ -111,6 +113,7 @@ class CNN(nn.Module):
 # define cnn and set to run on GPU
 cnn = CNN()
 cnn.cuda()
+print('CNN Architecture: ' , (cnn))
 
 # ----------------------------------------------------------------------------------------------------------------------
 # LOSS & OPTIMIZER
@@ -166,7 +169,7 @@ for images, labels in test_loader:
 
 # print test accuracy
 print()
-print('Test Accuracy of model on the 814 test images: %d %%' % (100 * correct / total))
+print('Test Accuracy of model on the 814 test images: %.2f %%' % (100 * correct / total))
 
 # turn confusion matrix into csv
 confusion_matrix = pd.DataFrame(confusion_matrix.numpy())
@@ -174,4 +177,4 @@ confusion_matrix.to_csv('fruits_cnn_subset_confmat.csv')
 
 # print run time
 print()
-print('fruits_cnn_subset1 run time: %s seconds' % (time.time() - start_time))
+print('fruits_cnn_subset1 run time: %.2f seconds' % (time.time() - start_time))

@@ -150,6 +150,7 @@ plt.xlabel("Epochs")
 #As such, the below line creates the appropriate xticks
 plt.xticks(np.arange(0, 2325, step=387), ('0','1', '2', '3', '4', '5','6'))
 plt.ylabel("Loss")
+#Change y scale to log to make it look better
 plt.yscale('log')
 plt.show()
 

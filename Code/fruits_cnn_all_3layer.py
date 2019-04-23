@@ -71,7 +71,7 @@ num_classes = 33
 # CONVOLUTIONAL NEURAL NETWORK (CNN) MODEL
 # ----------------------------------------------------------------------------------------------------------------------
 
-# 2 layer convolutional neural network
+# 3 layer convolutional neural network
 class CNN(nn.Module):
     def __init__(self):
         super(CNN, self).__init__()

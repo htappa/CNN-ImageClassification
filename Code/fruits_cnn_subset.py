@@ -42,8 +42,10 @@ batch_size = 40
 # use DataLoader to get batches of data from the datasets
 train_loader = torch.utils.data.DataLoader(train_data, batch_size=40, shuffle = True)
 test_loader = torch.utils.data.DataLoader(test_data, batch_size=40, shuffle = True)
+print()
 print('Size of Training Set: ' , (len(train_loader.dataset)))
 print('Size of Testing Set: ' , (len(test_loader.dataset)))
+print()
 
 def imshow(img):
     img = img / 2 + 0.5
@@ -53,7 +55,8 @@ def imshow(img):
 dataiter = iter(train_loader)
 images, labels = dataiter.next()
 imshow(torchvision.utils.make_grid(images))
-print(' '.join('%5s' % train_data.classes[labels[j]] for j in range(8)))
+print('Training labels associated with image batch:')
+print(', '.join('%5s' % train_data.classes[labels[j]] for j in range(8)))
 plt.show()
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -113,7 +116,9 @@ class CNN(nn.Module):
 # define cnn and set to run on GPU
 cnn = CNN()
 cnn.cuda()
+print()
 print('CNN Architecture: ' , (cnn))
+print()
 
 # ----------------------------------------------------------------------------------------------------------------------
 # LOSS & OPTIMIZER
@@ -131,13 +136,14 @@ for epoch in range(num_epochs):
         images = Variable(images).cuda()
         labels = Variable(labels).cuda()
 
-        # forward pass, backpropagation, optimize
+        # forward pass, backpropagate, optimize
         optimizer.zero_grad()
         outputs = cnn(images)
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()
 
+        # print loss for iterations in each epoch
         if (i + 1) % 100 == 0:
             print('Epoch [%d/%d], Iter [%d/%d] Loss: %.4f'
                   % (epoch + 1, num_epochs, i + 1, len(train_data) // batch_size, loss.item()))

@@ -15,7 +15,7 @@ import pandas as pd
 import time
 
 # set seed
-torch.manual_seed(10)
+torch.manual_seed(9)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # LOAD DATASET
@@ -42,6 +42,8 @@ batch_size = 40
 # use DataLoader to get batches of data from the datasets
 train_loader = torch.utils.data.DataLoader(train_data, batch_size=batch_size, shuffle = True)
 test_loader = torch.utils.data.DataLoader(test_data, batch_size=batch_size, shuffle = True)
+print('Size of Training Set: ' , (len(train_loader.dataset)))
+print('Size of Testing Set: ' , (len(test_loader.dataset)))
 
 def imshow(img):
     img = img / 2 + 0.5
@@ -111,6 +113,7 @@ class CNN(nn.Module):
 # define cnn and set to run on GPU
 cnn = CNN()
 cnn.cuda()
+print('CNN Architecture: ' , (cnn))
 
 # ----------------------------------------------------------------------------------------------------------------------
 # LOSS & OPTIMIZER
@@ -139,7 +142,7 @@ for epoch in range(num_epochs):
         optimizer.step()
 
         #append loss to loss_list
-        loss_list.append(loss.data)
+        loss_list.append(loss.item())
 
         # print loss for iterations in each epoch
         if (i + 1) % 100 == 0:
@@ -149,8 +152,13 @@ for epoch in range(num_epochs):
 # plot training loss
 plt.plot(loss_list)
 plt.title('Training Loss')
-plt.xlabel("???")
+plt.xlabel("Epochs")
+#The x-axis represents the number of epochs
+#It is broken down as number of images / minibatch size * epochs
+#As such, the below line creates the appropriate xticks
+plt.xticks(np.arange(0, 2325, step=387), ('0','1', '2', '3', '4', '5','6'))
 plt.ylabel("Loss")
+plt.yscale('log')
 plt.show()
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -188,13 +196,17 @@ for images, labels in test_loader:
 # plot test accuracy
 plt.plot(accuracy_list)
 plt.title('Test Accuracy')
-plt.xlabel("???")
-plt.ylabel("Accuracy")
+plt.xlabel("Epochs")
+#The x-axis represents the number of epochs
+#It is broken down as number of images / minibatch size * epochs
+#As such, the below line creates the appropriate xticks
+plt.xticks(np.arange(0, 130, step=22), ('0','1', '2', '3', '4', '5','6'))
+plt.ylabel("Accuracy (%)")
 plt.show()
 
 # print test accuracy
 print()
-print('Test Accuracy of model on the 5195 test images: %d %%' % (100 * correct / total))
+print('Test Accuracy of model on the 5195 test images: %.2f %%' % (100 * correct / total))
 
 # turn confusion matrix into csv
 confusion_matrix = pd.DataFrame(confusion_matrix.numpy())
@@ -202,4 +214,4 @@ confusion_matrix.to_csv('fruits_cnn_3layer_confmat.csv')
 
 # print run time
 print()
-print('fruits_cnn_3layer run time: %s seconds' % (time.time() - start_time))
+print('fruits_cnn_3layer run time: %.2f seconds' % (time.time() - start_time))

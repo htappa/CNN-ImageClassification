@@ -15,7 +15,7 @@ import pandas as pd
 import time
 
 # set seed
-torch.manual_seed(9)
+torch.manual_seed(10)
 
 # ----------------------------------------------------------------------------------------------------------------------
 # LOAD DATASET

@@ -136,6 +136,14 @@ for images, labels in test_loader:
     for t, p in zip(labels.view(-1), predicted.view(-1)):
         confusion_matrix[t.long(), p.long()] += 1
 
+# print test accuracy
+print()
+print('Test Accuracy of model on the 5195 test images: %.2f %%' % (100 * correct / total))
+
+# turn confusion matrix into csv
+confusion_matrix = pd.DataFrame(confusion_matrix.numpy())
+confusion_matrix.to_csv('fruits_cnn_2layer_confmat.csv')
+
 # print run time
 print()
 print('fruits_cnn_3layer run time: %.2f seconds' % (time.time() - start_time))

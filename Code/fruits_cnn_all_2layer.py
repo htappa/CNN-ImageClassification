@@ -138,7 +138,7 @@ for epoch in range(num_epochs):
         loss.backward()
         optimizer.step()
 
-        #append loss to loss_list
+        # append loss to loss_list
         loss_list.append(loss.item())
 
         # print loss for iterations in each epoch
@@ -150,12 +150,12 @@ for epoch in range(num_epochs):
 plt.plot(loss_list)
 plt.title('Training Loss')
 plt.xlabel("Epochs")
-#The x-axis represents the number of epochs
-#It is broken down as number of images / minibatch size * epochs
-#As such, the below line creates the appropriate xticks
+# the x-axis represents the number of epochs
+# it is broken down as number of images / minibatch size * epochs
+# as such, the below line creates the appropriate xticks
 plt.xticks(np.arange(0, 2325, step=387), ('0','1', '2', '3', '4', '5','6'))
 plt.ylabel("Loss")
-#Change y scale to log to make it look better
+# change y scale to log to make it look better
 plt.yscale('log')
 plt.show()
 
@@ -195,9 +195,9 @@ for images, labels in test_loader:
 plt.plot(accuracy_list)
 plt.title('Test Accuracy')
 plt.xlabel("Epochs")
-#The x-axis represents the number of epochs
-#It is broken down as number of images / minibatch size * epochs
-#As such, the below line creates the appropriate xticks
+# the x-axis represents the number of epochs
+# it is broken down as number of images / minibatch size * epochs
+# as such, the below line creates the appropriate xticks
 plt.xticks(np.arange(0, 130, step=22), ('0','1', '2', '3', '4', '5','6'))
 plt.ylabel("Accuracy (%)")
 plt.show()

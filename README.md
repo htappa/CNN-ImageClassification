@@ -26,7 +26,7 @@ The neural network model being implemented for this classificaiton task is a Con
 
 Each of these networks are set up to run CUDA operations, and our test machine utilized an NVIDIA Tesla K80 GPU. 
 
-Further description of the model and results can be found in the project report, "Group4ProjectReport.pdf."
+Further description of the model and results can be found in the associated report, "FruitClassificationUsingCNN.pdf".
 
 ### Dependencies
 CUDA compatible GPU  

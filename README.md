@@ -1,5 +1,7 @@
 # Fruits Classification Using CNN
 
+[![DOI](https://zenodo.org/badge/179127220.svg)](https://zenodo.org/badge/latestdoi/179127220)
+
 ### Authors
 Henry Tappa, M.S.  
 Ryan Kinsey, M.S.  
